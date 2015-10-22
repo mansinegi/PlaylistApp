@@ -3,94 +3,80 @@
 <head>
 	<title>Youtube Playlist</title>
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
 </head>
 <body>
 
-	<h1>Playlist Application</h1>
+	<h3 id="heading">Select an artist to display new playlist</h3>
 
 	<select class="form-control" id="artists">
 	  <option value="Ed Shereen" selected>Ed Shereen</option>
 	  <option value="Adam Levine">Adam Levine</option>
 	  <option value="Sam Smith">Sam Smith</option>
 	  <option value="Taylor Swift">Taylor Swift</option>
+	  <option value="Demi Lovato">Demi Lovato</option>
+	  <option value="Christina Perri">Christina Perri</option>
 	</select>
 
 	
 
-	<ul id="videoList" class="list-group">
+	<ul id="videoList" class="list-group"></ul>
+	
+</body>
+<script type="text/javascript">
+		function apicall(){
 
-	</ul>
-	<script type="text/javascript">
+			var artistName =  $( "select option:selected" ).text();
 
-	function apicall(){
+	      	$.ajax({
+	      		url : "http://localhost:3000/play",
+	      		method : 'POST',
+	      		data : {artist : artistName}
+	      	})
+	      	.done(function(data){
+	      		var items = data.items;
 
-		var artistName =  $( "select option:selected" ).text();
-      		//$("#msg").html(artistName);
+	      		var docFragment = $(document.createDocumentFragment());
 
-      		$.ajax({
-      			url : "http://localhost:3000/play",
-      			method : 'POST',
-      			data : {artist : artistName}
-      		})
-      		.done(function(data){
-      			var items = data.items;
-
-      			var docFragment = $(document.createDocumentFragment());
-
-      			for(var i=0; i<items.length; i++){
+	   			for(var i=0; i<items.length; i++){
 				    var videoItem = items[i];
-				    var title = $('<h5></h5>').html("<b>Title :</b> "+videoItem.snippet.title);
-				    var desc = $('<p></p>').html("<b>Description :</b>"+videoItem.snippet.description);
+				    var title = $('<h3 id="title"></h3>').html(videoItem.snippet.title);
+				    var desc = $('<p></p>').html(videoItem.snippet.description);
 				    var videoId = videoItem.id.videoId;
 				    var listItem = $("<li>",{
-						class : "list-group-item"
+						class : "list-group-item",
+
 				    });
 				    var iframe = $('<iframe />',{
 				 		src: "http://www.youtube.com/embed/"+videoId,
 				 		alt: 'MyAlt',
-				 		width : 350,
-				 		height : 250
+				 		width : 650,
+				 		height : 450,
+				 		frameborder : 0
 					});
 
-				    listItem.append(iframe,title,desc);
+				    listItem.append(title,desc,iframe);
 				    docFragment.append(listItem);
-				      //$("ul").append(listItem);
 				}
 				$("ul").append(docFragment);
-      			//console.log(data.items);
-      		});
+	      			
+	     	});
 
+		}
 
-	}
+		$(document).ready(function(){
+			apicall();
+			$("select").change(function(){
 
-	$(document).ready(function(){
-		apicall();
+				$("ul").html("");
 
-		$("select").change(function(){
+	 			apicall();
+	    	});
 
-			$("ul").html("");
-
- 			apicall();
-    	});
-
-		
-
-		
-    });
-
-
-
-	
-
-
-
-	
-
-
-
-	</script>
-</body>
+		});
+</script>
 
 </html>

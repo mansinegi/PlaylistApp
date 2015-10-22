@@ -1,0 +1,33 @@
+body{
+	margin-left: 30px;
+	background-color: #E6E6E6;
+}
+
+ul{
+	margin-top : 20px;
+	width :95%;
+}
+
+li{
+	overflow: hidden;
+}
+
+select{
+	
+	max-width : 20%;
+}
+
+#heading{
+	margin-left: 0px;
+}
+
+h3#title,p,iframe{
+	margin-left :10px;
+	padding-left: 10px;
+
+}
+
+h3#title{
+	text-decoration: underline;
+}
+
