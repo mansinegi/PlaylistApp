@@ -9,7 +9,7 @@
 			<li>Download the repository as zip folder.</li>
 			<li>Use Clone in Desktop option </li>
 		</ul>
-	<li>Open terminal and go inside the local repository folder(PlaylistApp).</li>
+	<li>Open terminal and go to the project directory(PlaylistApp).</li>
 	<li>Type command : node server.js</li>
 	<li>The following message will be displayed in the terminal : 
 			App running on http://localhost:3000</li>
