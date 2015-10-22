@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Youtube Playlist</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+	<h1>Playlist Application</h1>
+
+	<select class="form-control" id="artists">
+	  <option value="Ed Shereen" selected>Ed Shereen</option>
+	  <option value="Adam Levine">Adam Levine</option>
+	  <option value="Sam Smith">Sam Smith</option>
+	  <option value="Taylor Swift">Taylor Swift</option>
+	</select>
+
+	
+
+	<ul id="videoList" class="list-group">
+
+	</ul>
+	<script type="text/javascript">
+
+	function apicall(){
+
+		var artistName =  $( "select option:selected" ).text();
+      		//$("#msg").html(artistName);
+
+      		$.ajax({
+      			url : "http://localhost:3000/play",
+      			method : 'POST',
+      			data : {artist : artistName}
+      		})
+      		.done(function(data){
+      			var items = data.items;
+
+      			var docFragment = $(document.createDocumentFragment());
+
+      			for(var i=0; i<items.length; i++){
+				    var videoItem = items[i];
+				    var title = $('<h5></h5>').html("<b>Title :</b> "+videoItem.snippet.title);
+				    var desc = $('<p></p>').html("<b>Description :</b>"+videoItem.snippet.description);
+				    var videoId = videoItem.id.videoId;
+				    var listItem = $("<li>",{
+						class : "list-group-item"
+				    });
+				    var iframe = $('<iframe />',{
+				 		src: "http://www.youtube.com/embed/"+videoId,
+				 		alt: 'MyAlt',
+				 		width : 350,
+				 		height : 250
+					});
+
+				    listItem.append(iframe,title,desc);
+				    docFragment.append(listItem);
+				      //$("ul").append(listItem);
+				}
+				$("ul").append(docFragment);
+      			//console.log(data.items);
+      		});
+
+
+	}
+
+	$(document).ready(function(){
+		apicall();
+
+		$("select").change(function(){
+
+			$("ul").html("");
+
+ 			apicall();
+    	});
+
+		
+
+		
+    });
+
+
+
+	
+
+
+
+	
+
+
+
+	</script>
+</body>
+
+</html>
